@@ -21,17 +21,16 @@ plt.ion()
 
 class SemiSupervisor():
     """
-    Semi-supervise your learning.
+    Data point labelling.
 
-    When full supervision isn't necessary but you don't want your data to run
-    around without an adult in the room.
+    This class allows you to label individual data points.
     """
 
     def __init__(self, features, labels, classifier=None,
                  display_func=None, data_iterator=None,
                  keyboard_shortcuts=True):
         """
-        Make a class that allows semi-supervision.
+        Make a class that allows you to label data points.
 
         Parameters
         ----------
