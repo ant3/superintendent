@@ -2,6 +2,7 @@
 
 from . import iterator_functions
 from . import display_functions
+from . import validation
 
 import pandas as pd
 import numpy as np
@@ -51,9 +52,16 @@ class SemiSupervisor():
         """
         self.layout = widgets.VBox([])
 
-        self.classifier = self._valid_classifier(classifier)
-        self.features = self._valid_data(features)
-        self.labels = self._valid_data(labels)
+        if validation.valid_classifier(classifier):
+            self.classifier = classifier
+            # TODO: Fix this mess
+            self.retrain_button = widgets.HBox([])
+
+        if validation.valid_data(features):
+            self.features = features
+
+        if validation.valid_data(labels):
+            self.labels = labels
 
         self.progressbar = widgets.IntProgress(min=0, max=10, value=0,
                                                description='Progress:')
@@ -120,33 +128,6 @@ class SemiSupervisor():
         )
         instance = cls(*args, **kwargs)
         return instance
-
-    def _valid_classifier(self, classifier):
-        if classifier is not None and not (hasattr(classifier, 'fit') and
-                                           hasattr(classifier, 'predict')):
-
-            self.retrain_button = widgets.Button(description='Retrain',
-                                                 icon='refresh')
-            self.retrain_button.on_click(self.reclassify)
-
-            raise ValueError('The classifier needs to conform to '
-                             'the sklearn interface (fit/predict).')
-        else:
-            self.retrain_button = widgets.HBox([])
-        return classifier
-
-    def _valid_data(self, features):
-        if not isinstance(features, (pd.DataFrame, pd.Series, np.ndarray)):
-            raise ValueError('The features need to be an array or '
-                             'a pandas dataframe / sequence.')
-        return features
-
-    def _valid_visualisation(self, visualisation):
-        if visualisation is None:
-            return lambda x: x
-        elif not callable(visualisation):
-            raise ValueError('Values provided for visualisation keyword '
-                             'arguments need to be functions.')
 
     def reclassify(self, event):
         """
