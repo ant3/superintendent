@@ -149,6 +149,35 @@ class Labeller(abc.ABC):
 
         return instance
 
+    @classmethod
+    def from_series(cls, features, *args, image_size=None, **kwargs):
+        """Generate a labelling widget from an array of series arrays.
+
+        Params
+        ----------
+        features : np.ndarray
+            A numpy array of shape n_series, n_values
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        """
+        if not isinstance(features, np.ndarray):
+            raise ValueError(
+                "When using from_series, input features "
+                "needs to be a numpy array with shape "
+                "(n_series, n_values)."
+            )
+        
+        kwargs["display_func"] = kwargs.get(
+            "display_func", display.functions["series"],
+        )
+        instance = cls(features, *args, **kwargs)
+
+        return instance
+
     def _apply_annotation(self, sender):
 
         if isinstance(sender, dict) and "value" in sender:

@@ -99,8 +99,30 @@ def image_display_func(feature, imsize=None, n_samples=1):
     plt.show()
 
 
+def series_display_func(feature, n_samples=1):
+    """
+    Series display function.
+
+    Iterates over the rows in the array and uses matplotlib plot to actually
+    display the series.
+
+    Parameters
+    ----------
+    feature : np.ndarray
+        The series data, in the shape of n_values
+    """
+    fig, ax = plt.subplots(1, 1)
+
+    values = feature.values.reshape((-1))
+
+    ax.plot(values)
+
+    plt.show()
+
+
 functions = {
     "default": default_display_func,
     "image": image_display_func,
     "img": image_display_func,
+    "series": series_display_func,
 }

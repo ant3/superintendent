@@ -30,7 +30,7 @@ class Submitter(widgets.VBox):
     options = traitlets.List(list())
     max_buttons = traitlets.Integer(12)
 
-    def __init__(self, options=(), max_buttons=12, other_option=True):
+    def __init__(self, options=(), max_buttons=12, other_option=True, multi_label=False):
         """Create a widget that will render submission options.
 
         Note that all parameters can also be changed through assignment after
